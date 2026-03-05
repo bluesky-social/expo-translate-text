@@ -11,6 +11,13 @@ public class ExpoTranslateTextModule: Module {
     public func definition() -> ModuleDefinition {
         Name("ExpoTranslateText")
 
+        Function("isTranslationSupported") { () -> Bool in
+            if #available(iOS 18.0, *) {
+                return true
+            }
+            return false
+        }
+
         AsyncFunction("translateSheet") {
             [weak self] (params: [String: Any]) async throws -> [String: Any] in
             guard let self = self else {

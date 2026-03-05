@@ -29,3 +29,4 @@ export const translateTask = (params: TranslationTaskRequest) => {
   return ExpoTranslateText.translateTask(params);
 };
 export const translateSheet = ExpoTranslateText.translateSheet;
+export const isTranslationSupported = ExpoTranslateText.isTranslationSupported;

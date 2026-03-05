@@ -1,6 +1,8 @@
 package expo.modules.translatetext
 
 import android.os.Build
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.nl.languageid.LanguageIdentification
 import com.google.mlkit.nl.languageid.LanguageIdentificationOptions
@@ -19,6 +21,16 @@ import java.util.concurrent.atomic.AtomicInteger
 class ExpoTranslateTextModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("ExpoTranslateText")
+
+    Function("isTranslationSupported") {
+      // ML Kit requires API 23+ and Google Play Services
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        return@Function false
+      }
+      val context = appContext.reactContext ?: return@Function false
+      val availability = GoogleApiAvailability.getInstance()
+      return@Function availability.isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS
+    }
 
     AsyncFunction("translateTask") { inputJson: String, targetLangCode: String, sourceLangCode: String?, requiresWifi: Boolean, requireCharging: Boolean, promise: Promise ->
       translateTask(inputJson, targetLangCode, sourceLangCode, requiresWifi, requireCharging, promise)

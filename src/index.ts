@@ -6,9 +6,9 @@ import {
   TranslationTaskRequest,
   TranslationTaskResult,
 } from './ExpoTranslateText.types';
-import { translateTask, translateSheet, TranslationError } from './ExpoTranslateTextModule';
+import { translateTask, translateSheet, TranslationError, isTranslationSupported } from './ExpoTranslateTextModule';
 
-export { TranslationError, TranslationErrorCode };
+export { TranslationError, TranslationErrorCode, isTranslationSupported };
 
 // iOS uses numeric codes, Android uses string codes
 // Map both to our unified TranslationErrorCode
