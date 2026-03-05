@@ -37,6 +37,8 @@ export type TranslationErrorCode =
   | 'UNKNOWN_ERROR';
 
 export interface ExpoTranslateTextModule {
+  isTranslationSupported(): boolean;
+
   translateTask(params: TranslationTaskRequest): Promise<BatchTranslationTaskResult>;
 
   translateSheet(params: TranslationSheetRequest): Promise<TranslationSheetResult>;
