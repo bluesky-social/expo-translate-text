@@ -2,7 +2,7 @@ import SwiftUI
 
 public class Props: ObservableObject {
   @Published var texts: [String] = []
-  @Published var onSuccess: (([String]) -> Void)?
+  @Published var onSuccess: ((_ translatedTexts: [String], _ detectedSourceLanguage: String?) -> Void)?
   @Published var onError: ((String) -> Void)?
   @Published var shouldTranslate: Bool = false
   @Published var sourceLanguage: String?
