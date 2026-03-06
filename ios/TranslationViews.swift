@@ -39,14 +39,19 @@ struct IOSTranslateTasksAvailable: View {
     }
     do {
       var translatedTexts = Array(repeating: "", count: props.texts.count)
-    
+      var detectedSourceLanguage: String?
+
       for try await response in session.translate(batch: requests) {
         if let index = Int(response.clientIdentifier ?? "") {
           translatedTexts[index] = response.targetText
         }
+        // Capture the detected source language from the first response
+        if detectedSourceLanguage == nil {
+          detectedSourceLanguage = response.sourceLanguage.minimalIdentifier
+        }
       }
       DispatchQueue.main.async {
-        props.onSuccess?(translatedTexts)
+        props.onSuccess?(translatedTexts, detectedSourceLanguage)
       }
     } catch {
       DispatchQueue.main.async {

@@ -100,8 +100,10 @@ public class ExpoTranslateTextModule: Module {
             if #available(iOS 18.0, *) {
                 await MainActor.run { self.presentTranslationView(props) }
                 return try await withCheckedThrowingContinuation { continuation in
-                    props.onSuccess = { translatedTexts in
+                    props.onSuccess = { translatedTexts, detectedSourceLanguage in
                         let result: [String: Any]
+                        // Use detected source language, falling back to input if not available
+                        let finalSourceLanguage = detectedSourceLanguage ?? sourceLangCode
                         if inputType == .dictionary, let mapping = dictMapping {
                             var resultDict: [String: Any] = [:]
                             for (key, value) in mapping {
@@ -117,19 +119,19 @@ public class ExpoTranslateTextModule: Module {
                             }
                             result = [
                                 "translatedTexts": resultDict,
-                                "sourceLanguage": sourceLangCode as Any,
+                                "sourceLanguage": finalSourceLanguage as Any,
                                 "targetLanguage": targetLangCode,
                             ]
                         } else if inputType == .string {
                             result = [
                                 "translatedTexts": translatedTexts.first ?? "",
-                                "sourceLanguage": sourceLangCode as Any,
+                                "sourceLanguage": finalSourceLanguage as Any,
                                 "targetLanguage": targetLangCode,
                             ]
                         } else {
                             result = [
                                 "translatedTexts": translatedTexts,
-                                "sourceLanguage": sourceLangCode as Any,
+                                "sourceLanguage": finalSourceLanguage as Any,
                                 "targetLanguage": targetLangCode,
                             ]
                         }
